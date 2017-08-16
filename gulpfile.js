@@ -20,6 +20,7 @@ var gulp = require('gulp'),
     babel = require('gulp-babel'),
     syntax = require('postcss-scss'),
     del = require('del'),
+    spritesmith = require('gulp.spritesmith'),
     rename = require('gulp-rename');  
 
 gulp.task('vendor', function() {  
@@ -68,6 +69,21 @@ gulp.task('iconfont', function () { // svg font
         })
         .pipe(gulp.dest('dist/fonts'));
 });
+
+gulp.task('sprite', function () {
+  var spriteData = gulp.src('dev/img/sprites/*.png').pipe(spritesmith({
+    imgName: 'sprite.png',
+    cssName: '0_sprite.css',
+    padding: 20,
+    imgPath: '../img/sprites/'+ 'sprite.png'
+  }));
+  return (
+      spriteData.img.pipe(gulp.dest('dist/img/sprites')),
+      spriteData.css.pipe(gulp.dest('dev/css/'))
+  )
+ 
+});
+
 
 gulp.task('post-css', function () { // post css
     var processors = [
